@@ -13,7 +13,14 @@ export const Home = () => {
     setInput(ev.target.value);
   };
   const [searchOption, setSeachOption] = useState('shows');
+
   const isShowsSearch = searchOption === 'shows';
+  // useEffect(() => {
+  //   console.log('use useefect function');
+  //   return () => {
+  //     console.log('exit');
+  //   };
+  // }, [searchOption]);
   const onSearch = () => {
     apiGet(`/search/${searchOption}?q=${input}`).then(result => {
       setResults(result);
