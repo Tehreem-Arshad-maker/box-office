@@ -5,13 +5,35 @@ import { apiGet } from '../misc/config';
 export const Show = () => {
   const { id } = useParams();
   const [show, setShow] = useState(null);
+  const [isloading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   useEffect(() => {
-    apiGet(`/shows/${id}?embed[]=seasons&embed[]=cast`).then(results => {
-      setShow(results);
-    });
+    let isMounted = true;
+    apiGet(`/shows/${id}?embed[]=seasons&embed[]=cast`)
+      .then(results => {
+        if (isMounted) {
+          setShow(results);
+          setIsLoading(false);
+        }
+      })
+      .catch(err => {
+        if (isMounted) {
+          setError(err.message);
+          setIsLoading(false);
+        }
+      });
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
   console.log('show', show);
   // console.log('params', params);
+  if (isloading) {
+    return <div>Data is being loaded</div>;
+  }
+  if (error) {
+    return <div> Error occured:{error}</div>;
+  }
   return <div>thsi is showpage</div>;
 };
 export default Show;
