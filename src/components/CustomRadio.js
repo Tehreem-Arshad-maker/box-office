@@ -52,13 +52,15 @@ export const RadioWrapper = styled.label`
     background: ${({ theme }) => theme.mainColors.blue};
   }
 `;
+
 export const CustomRadio = ({ label, ...restProps }) => {
   return (
-    <label htmlFor={restProps.id}>
+    <RadioWrapper htmlFor={restProps.id}>
       {label}
       <input {...restProps} type="radio" />
       <span />
-    </label>
+    </RadioWrapper>
   );
 };
-// the order of restprops and type should br like this to avoid overriding
+
+export default CustomRadio;

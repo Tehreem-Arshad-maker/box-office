@@ -17,7 +17,7 @@ export const ActorGrid = ({ data }) => {
           deathday={person.deathday}
           gender={person.gender}
           image={person.image ? person.image.medium : IMAGE_NOT_FOUND}
-          />
+        />
       ))}
     </FlexGrid>
   );

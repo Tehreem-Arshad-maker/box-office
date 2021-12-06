@@ -14,3 +14,4 @@ export const MainPageLayout = ({ children }) => {
     </div>
   );
 };
+export default MainPageLayout;

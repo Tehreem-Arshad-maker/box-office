@@ -1,54 +1,51 @@
 import React, { useState } from 'react';
-import { ActorGrid } from '../components/actor/ActorGrid';
-import { CustomRadio } from '../components/CustomRadio';
-import { MainPageLayout } from '../components/MainPageLayout';
-import { ShowGrid } from '../components/show/ShowGrid';
+
 import { apiGet } from '../misc/config';
+import { ShowGrid } from '../components/show/ShowGrid';
+
+import { ActorGrid } from '../components/actor/ActorGrid';
 import { useLastQuery } from '../misc/custom-hools';
 import {
+  SearchInput,
   RadioInputsWrapper,
   SearchButtonWrapper,
-  SearchInput,
 } from './Home.styled';
+
+// eslint-disable-next-line import/no-named-as-default
+import CustomRadio from '../components/CustomRadio';
+import { MainPageLayout } from '../components/MainPageLayout';
 
 export const Home = () => {
   const [input, setInput] = useLastQuery();
   const [results, setResults] = useState(null);
-  const onInputChange = ev => {
-    // ev object
-
-    setInput(ev.target.value);
-  };
-  const [searchOption, setSeachOption] = useState('shows');
+  const [searchOption, setSearchOption] = useState('shows');
 
   const isShowsSearch = searchOption === 'shows';
-  // useEffect(() => {
-  //   console.log('use useefect function');
-  //   return () => {
-  //     console.log('exit');
-  //   };
-  // }, [searchOption]);
   const onSearch = () => {
     apiGet(`/search/${searchOption}?q=${input}`).then(result => {
       setResults(result);
-      // https://api.tvmaze.com/search/shows?q=men
-
-      // console.log(result);
     });
   };
+
+  const onInputChange = ev => {
+    setInput(ev.target.value);
+  };
+
   const onKeyDown = ev => {
     if (ev.keyCode === 13) {
       onSearch();
-    } // console.log(ev.keycode);
+    }
   };
+
   const onRadioChange = ev => {
-    setSeachOption(ev.target.value);
+    setSearchOption(ev.target.value);
   };
-  console.log(searchOption);
+
   const renderResults = () => {
     if (results && results.length === 0) {
-      return <div> No results</div>;
+      return <div>No results</div>;
     }
+
     if (results && results.length > 0) {
       return results[0].show ? (
         <ShowGrid data={results} />
@@ -59,6 +56,7 @@ export const Home = () => {
 
     return null;
   };
+
   return (
     <MainPageLayout>
       <SearchInput
@@ -68,6 +66,7 @@ export const Home = () => {
         onKeyDown={onKeyDown}
         value={input}
       />
+
       <RadioInputsWrapper>
         <div>
           <CustomRadio
@@ -78,26 +77,26 @@ export const Home = () => {
             onChange={onRadioChange}
           />
         </div>
+
         <div>
           <CustomRadio
             label="Actors"
-            id="actor-search"
+            id="actors-search"
             value="people"
-            checked={isShowsSearch}
+            checked={!isShowsSearch}
             onChange={onRadioChange}
           />
         </div>
       </RadioInputsWrapper>
+
       <SearchButtonWrapper>
         <button type="button" onClick={onSearch}>
-          {' '}
           Search
         </button>
       </SearchButtonWrapper>
       {renderResults()}
     </MainPageLayout>
   );
-  // whatever goes inside this tag will be a part of mainpagelayout
-  // we have used children property in that
-  // value prop inside input element is to directly associate input state with the input element.
 };
+
+export default Home;
